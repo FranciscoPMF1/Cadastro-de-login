@@ -1,5 +1,6 @@
 import psycopg
 from getpass import getpass
+from werkzeug.security import check_password_hash
 
 login_digitado = input("Digite seu login: ")
 senha_digitada = getpass("Digite sua senha: ")
@@ -27,7 +28,11 @@ with psycopg.connect(
     usuario = cursor.fetchone()
 
     if usuario:
-        print("Usuário encontrado!")
 
+        if check_password_hash(usuario[1], senha_digitada):
+            print("Login realizado com sucesso!")   
+
+        else:
+            print("Usuário ou senha inncorretos!")
     else:
-        print("Usuário não encontrado!")
+            print("Usuário ou senha inncorretos!")
